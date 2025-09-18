@@ -329,6 +329,85 @@ const AppRoutes = [
 </NavItem>
 ```
 
+### Component Refactoring Best Practices
+
+When components become too large (>200 lines), consider refactoring:
+
+#### Identifying Refactoring Opportunities
+- **Mixed Responsibilities**: Component handling both data and UI logic
+- **Large Render Methods**: Complex JSX with multiple concerns
+- **Excessive State**: Too many state properties for different features
+- **Duplicate Logic**: Similar patterns that could be abstracted
+
+#### Example: Modal Component Extraction
+
+**Before (Large Component):**
+```javascript
+// FetchData.js - 280 lines with mixed responsibilities
+export class FetchData extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      forecasts: [],          // Data management
+      showModal: false,       // Modal state
+      formData: {...},        // Form state
+      validationErrors: {...}, // Validation state
+      // ... many more properties
+    };
+  }
+
+  renderModal() {
+    // 100+ lines of modal JSX
+  }
+
+  handleFormSubmit() {
+    // Form handling logic
+  }
+
+  // ... rest of component
+}
+```
+
+**After (Separated Components):**
+```javascript
+// FetchData.js - 180 lines, focused on data management
+export class FetchData extends Component {
+  render() {
+    return (
+      <div>
+        {/* Table and main UI */}
+        <WeatherForecastModal
+          isVisible={this.state.showModal}
+          isEditMode={this.state.isEditMode}
+          forecast={this.state.editingForecast}
+          onSubmit={this.handleModalSubmit}
+          onClose={this.closeModal}
+        />
+      </div>
+    );
+  }
+}
+
+// WeatherForecastModal.js - 140 lines, focused on form logic
+export class WeatherForecastModal extends Component {
+  // Dedicated modal logic only
+}
+```
+
+#### Benefits of Component Separation:
+- **Single Responsibility**: Each component has one clear purpose
+- **Better Testability**: Easier to test smaller, focused components
+- **Reusability**: Extracted components can be reused elsewhere
+- **Maintainability**: Changes to modal don't affect main component
+- **Code Organization**: Cleaner, more readable codebase
+
+#### Refactoring Steps:
+1. **Identify Boundaries**: Determine what logic belongs together
+2. **Extract State**: Move relevant state to the new component
+3. **Define Props Interface**: Create clear communication between components
+4. **Move Methods**: Transfer related methods to the new component
+5. **Test Integration**: Ensure components work together correctly
+
 ## Code Style Guidelines
 
 ### Backend (C#)

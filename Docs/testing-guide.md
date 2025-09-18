@@ -328,6 +328,49 @@ Since the app uses in-memory storage:
 - ✅ Verify response status codes
 - ✅ Check state management in React components
 
+### Component Architecture Testing
+
+The application now uses a modular component architecture. When testing, pay attention to:
+
+#### **Component Interaction**
+- **FetchData ↔ WeatherForecastModal**: 
+  - ✅ Modal opens/closes correctly from main component
+  - ✅ Data passes correctly between components via props
+  - ✅ Form submission triggers parent component updates
+  - ✅ Success/error messages appear in correct component
+
+#### **Component Isolation**
+- **WeatherForecastModal Testing**:
+  - ✅ Modal handles its own form validation
+  - ✅ Form data resets properly when modal closes
+  - ✅ Edit mode pre-fills data correctly
+  - ✅ Loading states work independently
+
+#### **State Management**
+- **FetchData State**:
+  - ✅ Forecast data management
+  - ✅ Loading states
+  - ✅ Success/error messages
+  - ✅ Modal visibility control
+
+- **WeatherForecastModal State**:
+  - ✅ Form data handling
+  - ✅ Validation error display
+  - ✅ Input change tracking
+
+#### **Browser Developer Tools Testing**
+```javascript
+// Test component props in browser console:
+// 1. Open React Developer Tools
+// 2. Find WeatherForecastModal component
+// 3. Check props:
+//    - isVisible: boolean
+//    - isEditMode: boolean  
+//    - forecast: object (when editing)
+//    - onSubmit: function
+//    - onClose: function
+```
+
 ## Test Reporting
 
 ### Manual Test Report Template

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { WeatherForecastModal } from './WeatherForecastModal';
 
 export class FetchData extends Component {
   static displayName = FetchData.name;
@@ -9,16 +10,11 @@ export class FetchData extends Component {
       forecasts: [], 
       loading: true,
       showModal: false,
-      newForecast: {
-        date: '',
-        temperatureC: '',
-        summary: ''
-      },
       successMessage: '',
-      validationErrors: {},
       errorMessage: '',
       isEditMode: false,
-      editingForecast: null
+      editingForecast: null,
+      isSubmitting: false
     };
   }
 
@@ -110,7 +106,14 @@ export class FetchData extends Component {
         </div>
         {contents}
         
-        {this.renderModal()}
+        <WeatherForecastModal
+          isVisible={this.state.showModal}
+          isEditMode={this.state.isEditMode}
+          forecast={this.state.editingForecast}
+          isSubmitting={this.state.isSubmitting}
+          onSubmit={this.handleModalSubmit}
+          onClose={this.closeModal}
+        />
       </div>
     );
   }
@@ -133,11 +136,9 @@ export class FetchData extends Component {
     this.setState({ forecasts: data, loading: false });
   }
 
-  openModal() {
+  openModal = () => {
     this.setState({ 
       showModal: true, 
-      newForecast: { date: '', temperatureC: '', summary: '' },
-      validationErrors: {},
       successMessage: '',
       errorMessage: '',
       isEditMode: false,
@@ -145,15 +146,9 @@ export class FetchData extends Component {
     });
   }
 
-  editForecast(forecast) {
+  editForecast = (forecast) => {
     this.setState({
       showModal: true,
-      newForecast: {
-        date: forecast.date,
-        temperatureC: forecast.temperatureC.toString(),
-        summary: forecast.summary
-      },
-      validationErrors: {},
       successMessage: '',
       errorMessage: '',
       isEditMode: true,
@@ -161,48 +156,20 @@ export class FetchData extends Component {
     });
   }
 
-  closeModal() {
-    this.setState({ showModal: false });
-  }
-
-  handleInputChange(field, value) {
-    this.setState({
-      newForecast: { ...this.state.newForecast, [field]: value },
-      validationErrors: { ...this.state.validationErrors, [field]: '' }
+  closeModal = () => {
+    this.setState({ 
+      showModal: false,
+      isEditMode: false,
+      editingForecast: null,
+      isSubmitting: false
     });
   }
 
-  validateForm() {
-    const errors = {};
-    const { date, temperatureC, summary } = this.state.newForecast;
-
-    if (!date) {
-      errors.date = 'Date is required';
-    }
-
-    if (!temperatureC || temperatureC === '') {
-      errors.temperatureC = 'Temperature is required';
-    } else if (isNaN(temperatureC)) {
-      errors.temperatureC = 'Temperature must be a number';
-    }
-
-    if (!summary || summary.trim() === '') {
-      errors.summary = 'Summary is required';
-    }
-
-    return errors;
-  }
-
-  async addWeatherData() {
-    const errors = this.validateForm();
+  handleModalSubmit = async (formData) => {
+    this.setState({ isSubmitting: true });
     
-    if (Object.keys(errors).length > 0) {
-      this.setState({ validationErrors: errors });
-      return;
-    }
-
     try {
-      const url = this.state.isEditMode ? 'weatherforecast' : 'weatherforecast';
+      const url = 'weatherforecast';
       const method = this.state.isEditMode ? 'PUT' : 'POST';
       
       const response = await fetch(url, {
@@ -210,11 +177,7 @@ export class FetchData extends Component {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          date: this.state.newForecast.date,
-          temperatureC: parseInt(this.state.newForecast.temperatureC),
-          summary: this.state.newForecast.summary
-        })
+        body: JSON.stringify(formData)
       });
       
       if (response.ok) {
@@ -236,6 +199,8 @@ export class FetchData extends Component {
         ? 'Error updating weather forecast. Please try again.' 
         : 'Error adding weather forecast. Please try again.';
       this.setState({ errorMessage: message });
+    } finally {
+      this.setState({ isSubmitting: false });
     }
   }
 
@@ -260,77 +225,5 @@ export class FetchData extends Component {
         this.setState({ errorMessage: 'Error deleting weather forecast. Please try again.' });
       }
     }
-  }
-
-  renderModal() {
-    if (!this.state.showModal) return null;
-
-    return (
-      <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">
-                {this.state.isEditMode ? 'Edit Weather Forecast' : 'Add New Weather Forecast'}
-              </h5>
-              <button type="button" className="btn-close" onClick={() => this.closeModal()}></button>
-            </div>
-            <div className="modal-body">
-              <form>
-                <div className="mb-3">
-                  <label className="form-label">Date</label>
-                  <input 
-                    type="date" 
-                    className={`form-control ${this.state.validationErrors.date ? 'is-invalid' : ''}`}
-                    value={this.state.newForecast.date}
-                    onChange={(e) => this.handleInputChange('date', e.target.value)}
-                    readOnly={this.state.isEditMode}
-                  />
-                  {this.state.validationErrors.date && (
-                    <div className="invalid-feedback">{this.state.validationErrors.date}</div>
-                  )}
-                  {this.state.isEditMode && (
-                    <div className="form-text">Date cannot be changed when editing.</div>
-                  )}
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Temperature (°C)</label>
-                  <input 
-                    type="number" 
-                    className={`form-control ${this.state.validationErrors.temperatureC ? 'is-invalid' : ''}`}
-                    value={this.state.newForecast.temperatureC}
-                    onChange={(e) => this.handleInputChange('temperatureC', e.target.value)}
-                  />
-                  {this.state.validationErrors.temperatureC && (
-                    <div className="invalid-feedback">{this.state.validationErrors.temperatureC}</div>
-                  )}
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Summary</label>
-                  <input 
-                    type="text" 
-                    className={`form-control ${this.state.validationErrors.summary ? 'is-invalid' : ''}`}
-                    value={this.state.newForecast.summary}
-                    onChange={(e) => this.handleInputChange('summary', e.target.value)}
-                    placeholder="Enter weather summary"
-                  />
-                  {this.state.validationErrors.summary && (
-                    <div className="invalid-feedback">{this.state.validationErrors.summary}</div>
-                  )}
-                </div>
-              </form>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={() => this.closeModal()}>
-                Cancel
-              </button>
-              <button type="button" className="btn btn-primary" onClick={() => this.addWeatherData()}>
-                {this.state.isEditMode ? 'Update Forecast' : 'Add Forecast'}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
   }
 }

@@ -95,19 +95,26 @@ Root Folder/
 - **Layout.js**: Application shell with navigation
 - **Home.js**: Landing page with project information
 - **FetchData.js**: Main weather forecast management
-  - Complete CRUD operations
-  - Modal forms with validation
-  - Bootstrap UI components
-  - State management for UI feedback
+  - Weather forecast list display and table
+  - CRUD operation coordination
+  - API integration and data fetching
+  - State management for loading and messages
+- **WeatherForecastModal.js**: Dedicated modal component
+  - Add/edit weather forecast forms
+  - Form validation and error handling
+  - Reusable modal with props interface
+  - State management for form data
 - **Counter.js**: Demo component showing React patterns
 - **NavMenu.js**: Navigation component with routing
 
 #### Key Frontend Features:
+- **Component Architecture**: Modular components with single responsibilities
 - **Bootstrap Integration**: Responsive design and components
 - **Form Validation**: Client-side validation with error feedback
 - **State Management**: React class components with local state
 - **API Integration**: Fetch API for backend communication
 - **User Feedback**: Success/error messages and loading states
+- **Modal Management**: Separate modal component for better maintainability
 
 ### 5. **Configuration Layer**
 **Purpose**: Application settings and environment configuration

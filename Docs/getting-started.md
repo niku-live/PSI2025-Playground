@@ -158,6 +158,12 @@ dotnet build
 Once you have the application running:
 
 1. **📖 Read the Documentation**: Check out the [Project Structure](project-structure.md) to understand the codebase
+2. **🧪 Test the Features**: Try all CRUD operations (Create, Read, Update, Delete)
+3. **🔧 Explore the Code**: 
+   - Backend: `Controllers/WeatherForecastController.cs`
+   - Frontend: `ClientApp/src/components/FetchData.js` and `WeatherForecastModal.js`
+   - Data Layer: `Data/FakeDataContext.cs`
+4. **🚀 Start Developing**: Follow the [Development Guide](development-guide.md) for best practices
 2. **🧪 Test the API**: Import the [Postman collection](testing-guide.md) for comprehensive API testing
 3. **⚙️ Configure Settings**: Review [Configuration](configuration.md) for environment customization
 4. **🔧 Start Developing**: Follow the [Development Guide](development-guide.md) for best practices
