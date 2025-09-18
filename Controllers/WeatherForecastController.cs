@@ -64,8 +64,8 @@ public class WeatherForecastController : ControllerBase
         return NotFound();
     }
 
-    [HttpPost(Name = "generate")]
-    public IEnumerable<WeatherForecast> Generate(int count)
+    [HttpPatch]
+    public IEnumerable<WeatherForecast> Generate(int count = 5)
     {
         var generatedList = Enumerable.Range(1, count).Select(index => new WeatherForecast
         {
