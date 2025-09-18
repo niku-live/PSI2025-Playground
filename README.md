@@ -1,61 +1,50 @@
-# CoolApp
+# Playground Web Application
 
-## Project Overview
-CoolApp is a web application built with ASP.NET Core and React. It serves as a playground for learning and experimenting with modern web development technologies. The backend is implemented in C# (.NET 7), while the frontend uses React (JavaScript).
+A full-stack web application demonstrating CRUD operations for weather forecast management, built with ASP.NET Core (.NET 7) backend and React frontend.
 
-## Planned Functionality
-- Weather Forecast API and UI
-- Counter and demo components
-- Responsive navigation and layout
-- Integration between ASP.NET Core backend and React frontend
-- User authentication and authorization (planned)
-- Data persistence and CRUD operations (planned)
-- Error handling and logging
+> **Note**: This serves as a playground for learning and experimenting with modern web development technologies. It is not intended for production use.
 
-## Team Members
+## ✨ Key Features
+
+- **Complete CRUD API** - Create, read, update, delete weather forecasts
+- **Interactive React UI** - Responsive Bootstrap interface with modals and validation
+- **RESTful Architecture** - Clean API design with proper HTTP conventions
+- **In-Memory Data Store** - Ready for development and testing
+- **Comprehensive Testing** - Postman collection with automated validation
+
+## 🚀 Quick Start
+
+```bash
+# Clone and run the application
+cd WebAPI_Example
+dotnet run
+```
+
+Access the app at `https://localhost:7039`
+
+## 🛠️ Technology Stack
+
+- **Backend**: ASP.NET Core 7, C#
+- **Frontend**: React, Bootstrap 5, JavaScript
+- **Architecture**: RESTful API, SPA
+- **Data**: In-memory storage with dependency injection
+
+## 📚 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [**Getting Started**](Docs/getting-started.md) | Prerequisites, installation, and setup guide |
+| [**API Reference**](Docs/api-reference.md) | Complete endpoint documentation with examples |
+| [**Project Structure**](Docs/project-structure.md) | Architecture overview and file organization |
+| [**Development Guide**](Docs/development-guide.md) | Development workflow and best practices |
+| [**Testing Guide**](Docs/testing-guide.md) | Testing strategies and Postman collection usage |
+| [**Configuration**](Docs/configuration.md) | Environment setup and configuration options |
+| [**Troubleshooting**](Docs/troubleshooting.md) | Common issues, solutions, and debugging tips |
+| [**Roadmap**](Docs/roadmap.md) | Future enhancements and planned features |
+
+## 👥 Team Members
+
 - [Add team member names here]
 
-## Project Structure
-- `Controllers/` - ASP.NET Core API controllers
-- `Pages/` - Razor pages and error handling
-- `ClientApp/` - React frontend
-  - `src/components/` - React components
-- `Program.cs` - Application entry point
-- `WeatherForecast.cs` - Data model
-
-## How to Build
-### Prerequisites
-- .NET 7 SDK
-- Node.js and npm
-
-### Backend (ASP.NET Core)
-1. Open a terminal in the project root.
-2. Run:
-   ```pwsh
-   dotnet build
-   dotnet run
-   ```
-
-### Frontend (React)
-1. Navigate to `ClientApp`:
-   ```pwsh
-   cd ClientApp
-   npm install
-   npm start
-   ```
-
-## Running the Application
-- By default, running the backend will also serve the React frontend via ASP.NET Core proxy.
-- Access the app at `https://localhost:5001` or the port specified in `launchSettings.json`.
-
-## Configuration
-- App settings are in `appsettings.json` and `appsettings.Development.json`.
-- Frontend configuration is in `ClientApp/public/` and `ClientApp/src/`.
-
-## Additional Notes
-- For development, use the `Development` profile in `launchSettings.json`.
-- Error pages are handled in `Pages/Error.cshtml`.
-- For more details, see inline comments in source files.
-
 ---
-Feel free to update this README with new features, team members, and instructions as the project evolves.
+*For detailed documentation, see the [Docs](Docs/) folder. This project is actively maintained as of September 2025.*

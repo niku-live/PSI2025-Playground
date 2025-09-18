@@ -1,10 +1,38 @@
 {
   "info": {
     "name": "WeatherForecast API Collection",
-    "description": "Postman collection to test WeatherForecastController endpoints",
+    "description": "Postman collection to test WeatherForecastController endpoints and additional endpoints mapped in Program.cs",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
+    {
+      "name": "Hello World Endpoint",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/hello",
+          "host": ["{{baseUrl}}"],
+          "path": ["hello"]
+        },
+        "description": "Simple hello world endpoint mapped directly in Program.cs"
+      },
+      "response": []
+    },
+    {
+      "name": "Test Endpoint",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/test",
+          "host": ["{{baseUrl}}"],
+          "path": ["test"]
+        },
+        "description": "Test endpoint that calls HandleTestAction method mapped in Program.cs"
+      },
+      "response": []
+    },
     {
       "name": "Get All Weather Forecasts",
       "request": {
@@ -99,7 +127,7 @@
     {
       "name": "Generate Weather Forecasts",
       "request": {
-        "method": "POST",
+        "method": "PATCH",
         "header": [
           {
             "key": "Content-Type",
@@ -107,25 +135,25 @@
           }
         ],
         "url": {
-          "raw": "{{baseUrl}}/weatherforecast/generate?count=5",
+          "raw": "{{baseUrl}}/weatherforecast?count=5",
           "host": ["{{baseUrl}}"],
-          "path": ["weatherforecast", "generate"],
+          "path": ["weatherforecast"],
           "query": [
             {
               "key": "count",
               "value": "5",
-              "description": "Number of weather forecasts to generate"
+              "description": "Number of weather forecasts to generate (default: 5)"
             }
           ]
         },
-        "description": "Generates a specified number of random weather forecasts"
+        "description": "Generates a specified number of random weather forecasts using PATCH method"
       },
       "response": []
     },
     {
       "name": "Generate Weather Forecasts (Frontend Call)",
       "request": {
-        "method": "POST",
+        "method": "PATCH",
         "header": [
           {
             "key": "Content-Type",
@@ -137,9 +165,9 @@
           "raw": ""
         },
         "url": {
-          "raw": "{{baseUrl}}/weatherforecast/generate?count=7",
+          "raw": "{{baseUrl}}/weatherforecast?count=7",
           "host": ["{{baseUrl}}"],
-          "path": ["weatherforecast", "generate"],
+          "path": ["weatherforecast"],
           "query": [
             {
               "key": "count",
@@ -148,7 +176,26 @@
             }
           ]
         },
-        "description": "Generates weather forecasts as called by the frontend React component"
+        "description": "Generates weather forecasts as called by the frontend React component using PATCH method"
+      },
+      "response": []
+    },
+    {
+      "name": "Generate Weather Forecasts (Default Count)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/weatherforecast",
+          "host": ["{{baseUrl}}"],
+          "path": ["weatherforecast"]
+        },
+        "description": "Generates weather forecasts using the default count (5) - no count parameter needed"
       },
       "response": []
     }
@@ -156,7 +203,7 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "https://localhost:7043",
+      "value": "https://localhost:7039",
       "type": "string",
       "description": "Base URL for the WeatherForecast API (adjust port as needed)"
     }
@@ -190,6 +237,19 @@
           "if (pm.response.headers.get('Content-Type') && pm.response.headers.get('Content-Type').includes('application/json')) {",
           "    pm.test('Response is valid JSON', function () {",
           "        pm.response.to.be.json;",
+          "    });",
+          "}",
+          "",
+          "// Test for specific endpoint responses",
+          "if (pm.request.url.toString().includes('/hello')) {",
+          "    pm.test('Hello endpoint returns correct message', function () {",
+          "        pm.expect(pm.response.text()).to.eql('Hello World!');",
+          "    });",
+          "}",
+          "",
+          "if (pm.request.url.toString().includes('/test')) {",
+          "    pm.test('Test endpoint returns correct message', function () {",
+          "        pm.expect(pm.response.text()).to.eql('Test');",
           "    });",
           "}"
         ]

@@ -26,6 +26,12 @@ app.MapControllerRoute(
     pattern: "{controller}/{action=Index}/{id?}");
 
 app.MapGet("/hello", () => "Hello World!");
+app.MapGet("/test", HandleTestAction);
 app.MapFallbackToFile("index.html");
 
 app.Run();
+
+string HandleTestAction()
+{
+    return "Test";
+}
