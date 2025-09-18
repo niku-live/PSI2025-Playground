@@ -45,7 +45,14 @@ export class FetchData extends Component {
     return (
       <div>
         <h1 id="tableLabel">Weather forecast</h1>
-        <p>This component demonstrates fetching data from the server.</p>
+        <p>This component demonstrates fetching data from the server (Test).</p>
+        <button 
+          className="btn btn-primary mb-3" 
+          onClick={() => this.generateWeatherData()}
+          disabled={this.state.loading}
+        >
+          {this.state.loading ? 'Generating...' : 'Generate New Forecast'}
+        </button>
         {contents}
       </div>
     );
@@ -53,6 +60,18 @@ export class FetchData extends Component {
 
   async populateWeatherData() {
     const response = await fetch('weatherforecast');
+    const data = await response.json();
+    this.setState({ forecasts: data, loading: false });
+  }
+
+  async generateWeatherData() {
+    this.setState({ loading: true });
+    const response = await fetch('weatherforecast/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
     const data = await response.json();
     this.setState({ forecasts: data, loading: false });
   }
