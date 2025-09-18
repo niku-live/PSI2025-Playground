@@ -1,4 +1,4 @@
-namespace CoolApp;
+namespace CoolApp.Models;
 
 public class WeatherForecast
 {

@@ -1,8 +1,11 @@
+using CoolApp.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton<IDataContext, FakeDataContext>();
 
 var app = builder.Build();
 
