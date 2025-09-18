@@ -16,7 +16,9 @@ export class FetchData extends Component {
       },
       successMessage: '',
       validationErrors: {},
-      errorMessage: ''
+      errorMessage: '',
+      isEditMode: false,
+      editingForecast: null
     };
   }
 
@@ -44,6 +46,13 @@ export class FetchData extends Component {
               <td>{forecast.temperatureF}</td>
               <td>{forecast.summary}</td>
               <td>
+                <button 
+                  className="btn btn-warning btn-sm me-1"
+                  onClick={() => this.editForecast(forecast)}
+                  title="Edit forecast"
+                >
+                  ✏️
+                </button>
                 <button 
                   className="btn btn-danger btn-sm"
                   onClick={() => this.deleteForecast(forecast.date)}
@@ -130,7 +139,25 @@ export class FetchData extends Component {
       newForecast: { date: '', temperatureC: '', summary: '' },
       validationErrors: {},
       successMessage: '',
-      errorMessage: ''
+      errorMessage: '',
+      isEditMode: false,
+      editingForecast: null
+    });
+  }
+
+  editForecast(forecast) {
+    this.setState({
+      showModal: true,
+      newForecast: {
+        date: forecast.date,
+        temperatureC: forecast.temperatureC.toString(),
+        summary: forecast.summary
+      },
+      validationErrors: {},
+      successMessage: '',
+      errorMessage: '',
+      isEditMode: true,
+      editingForecast: forecast
     });
   }
 
@@ -175,8 +202,11 @@ export class FetchData extends Component {
     }
 
     try {
-      const response = await fetch('weatherforecast', {
-        method: 'POST',
+      const url = this.state.isEditMode ? 'weatherforecast' : 'weatherforecast';
+      const method = this.state.isEditMode ? 'PUT' : 'POST';
+      
+      const response = await fetch(url, {
+        method: method,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -189,14 +219,23 @@ export class FetchData extends Component {
       
       if (response.ok) {
         this.closeModal();
-        this.setState({ successMessage: 'Weather forecast added successfully!', errorMessage: '' });
+        const message = this.state.isEditMode 
+          ? 'Weather forecast updated successfully!' 
+          : 'Weather forecast added successfully!';
+        this.setState({ successMessage: message, errorMessage: '' });
         this.populateWeatherData(); // Refresh the table
       } else {
-        this.setState({ errorMessage: 'Failed to add weather forecast. Please try again.' });
+        const message = this.state.isEditMode 
+          ? 'Failed to update weather forecast. Please try again.' 
+          : 'Failed to add weather forecast. Please try again.';
+        this.setState({ errorMessage: message });
       }
     } catch (error) {
-      console.error('Error adding weather data:', error);
-      this.setState({ errorMessage: 'Error adding weather forecast. Please try again.' });
+      console.error('Error saving weather data:', error);
+      const message = this.state.isEditMode 
+        ? 'Error updating weather forecast. Please try again.' 
+        : 'Error adding weather forecast. Please try again.';
+      this.setState({ errorMessage: message });
     }
   }
 
@@ -231,7 +270,9 @@ export class FetchData extends Component {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Add New Weather Forecast</h5>
+              <h5 className="modal-title">
+                {this.state.isEditMode ? 'Edit Weather Forecast' : 'Add New Weather Forecast'}
+              </h5>
               <button type="button" className="btn-close" onClick={() => this.closeModal()}></button>
             </div>
             <div className="modal-body">
@@ -243,9 +284,13 @@ export class FetchData extends Component {
                     className={`form-control ${this.state.validationErrors.date ? 'is-invalid' : ''}`}
                     value={this.state.newForecast.date}
                     onChange={(e) => this.handleInputChange('date', e.target.value)}
+                    readOnly={this.state.isEditMode}
                   />
                   {this.state.validationErrors.date && (
                     <div className="invalid-feedback">{this.state.validationErrors.date}</div>
+                  )}
+                  {this.state.isEditMode && (
+                    <div className="form-text">Date cannot be changed when editing.</div>
                   )}
                 </div>
                 <div className="mb-3">
@@ -280,7 +325,7 @@ export class FetchData extends Component {
                 Cancel
               </button>
               <button type="button" className="btn btn-primary" onClick={() => this.addWeatherData()}>
-                Add Forecast
+                {this.state.isEditMode ? 'Update Forecast' : 'Add Forecast'}
               </button>
             </div>
           </div>
