@@ -25,6 +25,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 
+app.MapGet("/hello", () => "Hello World!");
 app.MapFallbackToFile("index.html");
 
 app.Run();
