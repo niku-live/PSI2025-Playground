@@ -1,0 +1,199 @@
+{
+  "info": {
+    "name": "WeatherForecast API Collection",
+    "description": "Postman collection to test WeatherForecastController endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Weather Forecasts",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/weatherforecast",
+          "host": ["{{baseUrl}}"],
+          "path": ["weatherforecast"]
+        },
+        "description": "Retrieves all weather forecasts from the data context"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Weather Forecast",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"date\": \"2025-09-20\",\n  \"temperatureC\": 25,\n  \"summary\": \"Sunny\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/weatherforecast",
+          "host": ["{{baseUrl}}"],
+          "path": ["weatherforecast"]
+        },
+        "description": "Creates a new weather forecast entry"
+      },
+      "response": []
+    },
+    {
+      "name": "Update Weather Forecast",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"date\": \"2025-09-20\",\n  \"temperatureC\": 30,\n  \"summary\": \"Very Sunny\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/weatherforecast",
+          "host": ["{{baseUrl}}"],
+          "path": ["weatherforecast"]
+        },
+        "description": "Updates an existing weather forecast or creates a new one if it doesn't exist"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Weather Forecast",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/weatherforecast?date=2025-09-20",
+          "host": ["{{baseUrl}}"],
+          "path": ["weatherforecast"],
+          "query": [
+            {
+              "key": "date",
+              "value": "2025-09-20",
+              "description": "Date of the weather forecast to delete (YYYY-MM-DD format)"
+            }
+          ]
+        },
+        "description": "Deletes a weather forecast by date"
+      },
+      "response": []
+    },
+    {
+      "name": "Generate Weather Forecasts",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/weatherforecast/generate?count=5",
+          "host": ["{{baseUrl}}"],
+          "path": ["weatherforecast", "generate"],
+          "query": [
+            {
+              "key": "count",
+              "value": "5",
+              "description": "Number of weather forecasts to generate"
+            }
+          ]
+        },
+        "description": "Generates a specified number of random weather forecasts"
+      },
+      "response": []
+    },
+    {
+      "name": "Generate Weather Forecasts (Frontend Call)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{baseUrl}}/weatherforecast/generate?count=7",
+          "host": ["{{baseUrl}}"],
+          "path": ["weatherforecast", "generate"],
+          "query": [
+            {
+              "key": "count",
+              "value": "7",
+              "description": "Number of weather forecasts to generate (7 days for frontend)"
+            }
+          ]
+        },
+        "description": "Generates weather forecasts as called by the frontend React component"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://localhost:7043",
+      "type": "string",
+      "description": "Base URL for the WeatherForecast API (adjust port as needed)"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Pre-request script for the collection",
+          "console.log('Testing WeatherForecast API endpoint: ' + pm.request.url);"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Basic test scripts for all requests",
+          "pm.test('Status code is success', function () {",
+          "    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+          "});",
+          "",
+          "pm.test('Response time is less than 2000ms', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+          "});",
+          "",
+          "// Test for JSON responses",
+          "if (pm.response.headers.get('Content-Type') && pm.response.headers.get('Content-Type').includes('application/json')) {",
+          "    pm.test('Response is valid JSON', function () {",
+          "        pm.response.to.be.json;",
+          "    });",
+          "}"
+        ]
+      }
+    }
+  ]
+}
