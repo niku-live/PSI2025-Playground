@@ -15,7 +15,8 @@ export class FetchData extends Component {
         summary: ''
       },
       successMessage: '',
-      validationErrors: {}
+      validationErrors: {},
+      errorMessage: ''
     };
   }
 
@@ -23,7 +24,7 @@ export class FetchData extends Component {
     this.populateWeatherData();
   }
 
-  static renderForecastsTable(forecasts) {
+  renderForecastsTable(forecasts) {
     return (
       <table className="table table-striped" aria-labelledby="tableLabel">
         <thead>
@@ -32,6 +33,7 @@ export class FetchData extends Component {
             <th>Temp. (C)</th>
             <th>Temp. (F)</th>
             <th>Summary</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -41,6 +43,15 @@ export class FetchData extends Component {
               <td>{forecast.temperatureC}</td>
               <td>{forecast.temperatureF}</td>
               <td>{forecast.summary}</td>
+              <td>
+                <button 
+                  className="btn btn-danger btn-sm"
+                  onClick={() => this.deleteForecast(forecast.date)}
+                  title="Delete forecast"
+                >
+                  ✕
+                </button>
+              </td>
             </tr>
           )}
         </tbody>
@@ -51,7 +62,7 @@ export class FetchData extends Component {
   render() {
     let contents = this.state.loading
       ? <p><em>Loading...</em></p>
-      : FetchData.renderForecastsTable(this.state.forecasts);
+      : this.renderForecastsTable(this.state.forecasts);
 
     return (
       <div>
@@ -62,6 +73,13 @@ export class FetchData extends Component {
           <div className="alert alert-success alert-dismissible fade show" role="alert">
             {this.state.successMessage}
             <button type="button" className="btn-close" onClick={() => this.setState({ successMessage: '' })}></button>
+          </div>
+        )}
+        
+        {this.state.errorMessage && (
+          <div className="alert alert-danger alert-dismissible fade show" role="alert">
+            {this.state.errorMessage}
+            <button type="button" className="btn-close" onClick={() => this.setState({ errorMessage: '' })}></button>
           </div>
         )}
         
@@ -111,7 +129,8 @@ export class FetchData extends Component {
       showModal: true, 
       newForecast: { date: '', temperatureC: '', summary: '' },
       validationErrors: {},
-      successMessage: ''
+      successMessage: '',
+      errorMessage: ''
     });
   }
 
@@ -170,11 +189,37 @@ export class FetchData extends Component {
       
       if (response.ok) {
         this.closeModal();
-        this.setState({ successMessage: 'Weather forecast added successfully!' });
+        this.setState({ successMessage: 'Weather forecast added successfully!', errorMessage: '' });
         this.populateWeatherData(); // Refresh the table
+      } else {
+        this.setState({ errorMessage: 'Failed to add weather forecast. Please try again.' });
       }
     } catch (error) {
       console.error('Error adding weather data:', error);
+      this.setState({ errorMessage: 'Error adding weather forecast. Please try again.' });
+    }
+  }
+
+  async deleteForecast(date) {
+    if (window.confirm(`Are you sure you want to delete the forecast for ${date}?`)) {
+      try {
+        const response = await fetch(`weatherforecast?date=${date}`, {
+          method: 'DELETE'
+        });
+        
+        if (response.ok) {
+          this.setState({ 
+            successMessage: 'Weather forecast deleted successfully!', 
+            errorMessage: '' 
+          });
+          this.populateWeatherData(); // Refresh the table
+        } else {
+          this.setState({ errorMessage: 'Failed to delete weather forecast. Please try again.' });
+        }
+      } catch (error) {
+        console.error('Error deleting weather data:', error);
+        this.setState({ errorMessage: 'Error deleting weather forecast. Please try again.' });
+      }
     }
   }
 
