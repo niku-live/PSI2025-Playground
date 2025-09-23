@@ -30,7 +30,7 @@ All changes to this project are documented step by step [here](Docs/step-by-step
 
 ## 🛠️ Technology Stack
 
-- **Backend**: ASP.NET Core 7, C#
+- **Backend**: ASP.NET Core (Latest), C#
 - **Frontend**: React, Bootstrap 5, JavaScript
 - **Architecture**: RESTful API, SPA
 - **Data**: In-memory storage with dependency injection
@@ -54,6 +54,12 @@ All changes to this project are documented step by step [here](Docs/step-by-step
 ## 👥 Team Members
 
 - [Add team member names here]
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+The MIT License allows unrestricted use, modification, and distribution while requiring only attribution.
 
 ---
 *For detailed documentation, see the [Docs](Docs/) folder. This project is actively maintained as of September 2025.*
