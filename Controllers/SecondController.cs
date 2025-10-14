@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using CoolApp.Models;
 using CoolApp.Data;
 
@@ -6,17 +6,17 @@ namespace CoolApp.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class WeatherForecastController : ControllerBase
+public class SecondController : ControllerBase
 {
     private static readonly string[] Summaries = new[]
     {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-    private readonly ILogger<WeatherForecastController> _logger;
+    private readonly ILogger<SecondController> _logger;
     private static Data.FakeDataContext _dataContext = new Data.FakeDataContext();
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    public SecondController(ILogger<SecondController> logger)
     {
         _logger = logger;
     }
@@ -24,20 +24,20 @@ public class WeatherForecastController : ControllerBase
     [HttpGet]
     public IEnumerable<WeatherForecast> Get()
     {
-        return _dataContext.WeatherForecasts;
+        return _dataContext.SecondSourceForecasts;
     }
 
     [HttpPost]
     public WeatherForecast Create(WeatherForecast forecast)
     {
-        _dataContext.WeatherForecasts.Add(forecast);
+        _dataContext.SecondSourceForecasts.Add(forecast);
         return forecast;
     }
 
     [HttpPut]
     public WeatherForecast Update(WeatherForecast forecast)
     {
-        var existing = _dataContext.WeatherForecasts.FirstOrDefault(wf => wf.Date == forecast.Date);
+        var existing = _dataContext.SecondSourceForecasts.FirstOrDefault(wf => wf.Date == forecast.Date);
         if (existing != null)
         {
             existing.TemperatureC = forecast.TemperatureC;
@@ -46,7 +46,7 @@ public class WeatherForecastController : ControllerBase
         else
         {
             existing = forecast;
-            _dataContext.WeatherForecasts.Add(existing);
+            _dataContext.SecondSourceForecasts.Add(existing);
         }
         return existing;
     }
@@ -54,10 +54,10 @@ public class WeatherForecastController : ControllerBase
     [HttpDelete]
     public IActionResult Delete(DateOnly date)
     {
-        var existing = _dataContext.WeatherForecasts.FirstOrDefault(wf => wf.Date == date);
+        var existing = _dataContext.SecondSourceForecasts.FirstOrDefault(wf => wf.Date == date);
         if (existing != null)
         {
-            _dataContext.WeatherForecasts.Remove(existing);
+            _dataContext.SecondSourceForecasts.Remove(existing);
             return Ok();
         }
         return NotFound();
@@ -75,7 +75,7 @@ public class WeatherForecastController : ControllerBase
 
         foreach (var item in generatedList)
         {
-            _dataContext.WeatherForecasts.Add(item);
+            _dataContext.SecondSourceForecasts.Add(item);
         }
 
         return generatedList;
