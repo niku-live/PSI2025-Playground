@@ -1,9 +1,8 @@
 ﻿namespace CoolApp.UnitTests;
 
-[TestClass]
 public sealed class BasicTests
 {
-    [TestMethod]
+    [Fact]
     public void Test_TemperatureCalculation()
     {
         // Arrange
@@ -15,7 +14,7 @@ public sealed class BasicTests
         // Act
         var temperatureF = forecast.TemperatureF;
 
-        // Assert
-        Assert.AreEqual(211, temperatureF);
+        // Assert        
+        Assert.Equal(211, temperatureF);
     }
 }
