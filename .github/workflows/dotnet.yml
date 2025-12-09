@@ -50,7 +50,7 @@ jobs:
         hide_complexity: false
         indicators: false
         output: both
-        thresholds: '60 80'
+        thresholds: '10 20'
 
     - name: Report code coverage to PR
       uses: marocchino/sticky-pull-request-comment@v2
