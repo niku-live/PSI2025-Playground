@@ -31,7 +31,7 @@ public class WeatherForecastController : ControllerBase
     [HttpPost]
     public WeatherForecast Create(WeatherForecast forecast)
     {
-        _dataContext.WeatherForecasts.Add(forecast)
+        _dataContext.WeatherForecasts.Add(forecast);
         return forecast;
     }
 
