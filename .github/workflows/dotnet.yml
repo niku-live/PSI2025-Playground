@@ -33,7 +33,7 @@ jobs:
       run:  dotnet tool install --global dotnet-coverage
     
     - name: Merge results from all test projects into 1 file
-      run: dotnet-coverage merge TestResults/**/coverage.cobertura.xml --recursive --output unified.cobertura.xml --output-format cobertura
+      run: dotnet-coverage merge TestResults/**/coverage.cobertura.xml --output unified.cobertura.xml --output-format cobertura
 
     - name: Generate report on code coverage
       uses: irongut/CodeCoverageSummary@v1.3.0
@@ -48,8 +48,8 @@ jobs:
         output: both
         thresholds: '60 80'
 
-    # - name: Report code coverage to PR
-    #   uses: marocchino/sticky-pull-request-comment@v2
-    #   with:
-    #     recreate: true
-    #     path: code-coverage-results.md
+    - name: Report code coverage to PR
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        recreate: true
+        path: code-coverage-results.md
