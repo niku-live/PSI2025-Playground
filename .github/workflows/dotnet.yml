@@ -24,8 +24,6 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    # - name: Test
-    #   run: dotnet test --no-build --verbosity normal
     - name: Run tests and report coverage
       run: dotnet test --collect:"XPlat Code Coverage" --results-directory ./TestResults
 
@@ -35,11 +33,11 @@ jobs:
     - name: Merge results from all test projects into 1 file
       run: dotnet-coverage merge TestResults/**/coverage.cobertura.xml --output unified.cobertura.xml --output-format cobertura
 
-    - name: 'Upload Artifact'
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-file
-        path: unified.cobertura.xml
+    # - name: 'Upload Artifact'
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: coverage-file
+    #     path: unified.cobertura.xml
 
     - name: Generate report on code coverage
       uses: irongut/CodeCoverageSummary@v1.3.0
